@@ -89,6 +89,22 @@ video{width:100%;height:100%;background:#000}
   <video id="video" autoplay playsinline controls></video>
   <div class="progress"><span id="bar"></span></div>
 </section>
+  <section class="player" id="player">
+  <video id="video" autoplay playsinline controls></video>
+  <div class="progress"><span id="bar"></span></div>
+</section>
+
+<!-- 🔒 SEM TO PRILEP -->
+<div class="pinOverlay" id="pinOverlay">
+  <div class="pinBox">
+    <h2>🔒 Tajné menu</h2>
+    <input id="pinInput" type="password" placeholder="7808" inputmode="numeric">
+    <div class="pinActions">
+      <button id="pinOk">OK</button>
+      <button id="pinCancel">Zrušiť</button>
+    </div>
+  </div>
+</div>
 
 <script>
 const API_BASE="https://websharetv-worker.virivkyonlinecz.workers.dev";
