@@ -97,6 +97,27 @@ button{cursor:pointer;border:0;color:#fff}
 .secondary{background:rgba(255,255,255,.16);border:1px solid var(--line)}
 #heroAdult{display:none}
 
+/* LOAD MORE */
+.load-more-wrap{
+  display:flex;
+  justify-content:center;
+  margin:30px 0 0;
+}
+.load-more{
+  display:none;
+  min-width:220px;
+  padding:16px 24px;
+  border-radius:999px;
+  background:rgba(255,255,255,.13);
+  border:1px solid rgba(255,255,255,.18);
+  font-weight:1000;
+  font-size:18px;
+}
+.load-more:hover{
+  background:#fff;
+  color:#000;
+}
+
 /* CONTENT */
 .content{padding:4px clamp(14px,4vw,58px) 80px}
 .section-head{display:flex;align-items:end;gap:14px;margin:26px 0 14px}
@@ -247,6 +268,10 @@ video{
 
     <div id="empty" class="empty">Zatiaľ nič nehľadáš.</div>
     <div id="grid" class="grid"></div>
+
+    <div class="load-more-wrap">
+      <button id="loadMore" class="load-more">Načítať ďalšie</button>
+    </div>
   </main>
 </div>
 
@@ -305,6 +330,10 @@ let category = "video";
 let adultUnlocked = false;
 let items = [];
 let lastQuery = "";
+let currentOffset = 0;
+let currentLimit = 40;
+let hasMore = false;
+let loadingMore = false;
 let logoClicks = 0;
 let controlsTimer = null;
 
@@ -321,6 +350,7 @@ const video = $("video");
 const bar = $("bar");
 const playerTitle = $("playerTitle");
 const playerError = $("playerError");
+const loadMoreBtn = $("loadMore");
 
 function esc(s){
   return String(s || "").replace(/[&<>"']/g, c => ({
@@ -379,6 +409,9 @@ function setCategory(cat){
   }
 
   items = [];
+  currentOffset = 0;
+  hasMore = false;
+  updateLoadMoreButton();
   render();
   sectionMeta.textContent = "Zadaj názov a stlač Hľadať";
   empty.textContent = "Zatiaľ nič nehľadáš.";
@@ -394,6 +427,10 @@ async function search(){
   }
 
   lastQuery = term;
+  currentOffset = 0;
+  hasMore = false;
+  updateLoadMoreButton();
+
   setStatus("Hľadám...");
   sectionMeta.textContent = "Hľadám „" + term + "“…";
   empty.textContent = "Hľadám...";
@@ -401,26 +438,62 @@ async function search(){
   grid.innerHTML = "";
   items = [];
 
+  await fetchPage(false);
+}
+
+async function fetchPage(append){
+  if (loadingMore) return;
+  if (!lastQuery) return;
+
+  loadingMore = true;
+  updateLoadMoreButton();
+
   try{
-    const res = await fetch(API_BASE + "/api/search?q=" + encodeURIComponent(term) + "&category=" + encodeURIComponent(category), {
-      headers:{accept:"application/json"}
-    });
+    const url =
+      API_BASE +
+      "/api/search?q=" + encodeURIComponent(lastQuery) +
+      "&category=" + encodeURIComponent(category) +
+      "&offset=" + encodeURIComponent(currentOffset) +
+      "&limit=" + encodeURIComponent(currentLimit);
+
+    const res = await fetch(url, { headers:{accept:"application/json"} });
     const data = await res.json();
     if (data.error) throw new Error(data.message || "Chyba API");
 
-    items = Array.isArray(data.items) ? data.items : [];
+    const newItems = Array.isArray(data.items) ? data.items : [];
+
+    if (append) items = items.concat(newItems);
+    else items = newItems;
+
+    currentOffset = Number(data.nextOffset ?? (currentOffset + currentLimit));
+    hasMore = Boolean(data.hasMore ?? (newItems.length >= currentLimit));
+
     render();
 
-    sectionMeta.textContent = "Nájdené: " + items.length + " · kategória: " + category;
+    sectionMeta.textContent =
+      "Zobrazené: " + items.length +
+      (hasMore ? " · môžeš načítať ďalšie" : " · koniec výsledkov") +
+      " · kategória: " + category;
+
     setStatus(items.length ? "Hotovo" : "Nič sa nenašlo");
     empty.textContent = items.length ? "" : "Nič sa nenašlo.";
 
   }catch(e){
-    empty.style.display = "block";
+    empty.style.display = items.length ? "none" : "block";
     empty.textContent = e.message || "Chyba";
     sectionMeta.textContent = "Chyba pri hľadaní";
     setStatus("Chyba");
+  }finally{
+    loadingMore = false;
+    updateLoadMoreButton();
   }
+}
+
+function updateLoadMoreButton(){
+  if (!loadMoreBtn) return;
+  loadMoreBtn.style.display = hasMore || loadingMore ? "inline-flex" : "none";
+  loadMoreBtn.disabled = loadingMore;
+  loadMoreBtn.textContent = loadingMore ? "Načítavam..." : "Načítať ďalšie";
 }
 
 function render(){
@@ -569,6 +642,8 @@ function unlockAdult(){
   setStatus("18+ odomknuté");
 }
 
+loadMoreBtn.onclick = () => fetchPage(true);
+
 $("searchForm").addEventListener("submit", e => {
   e.preventDefault();
   search();
@@ -648,6 +723,7 @@ document.addEventListener("keydown", e => {
 });
 
 refreshAdultButton();
+updateLoadMoreButton();
 setCategory("video");
 </script>
 </body>
