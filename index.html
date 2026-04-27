@@ -116,12 +116,31 @@ function updateFocus(){
 
 async function search(){
   const term=q.value.trim();
-  if(!term){setStatus("Zadaj názov filmu");return}
-  setStatus("Hľadám...");
+  if(!term){setStatus("Zadaj názov");return}
+
+  setStatus(category==="audio" ? "Hľadám hudbu..." : "Hľadám filmy...");
   empty.style.display="block";
   empty.textContent="Hľadám...";
   grid.innerHTML="";
   items=[];
+
+  try{
+    const data=await api(
+      "/api/search?q="+encodeURIComponent(term)+
+      "&category="+encodeURIComponent(category)
+    );
+
+    if(data.error) throw new Error(data.message);
+
+    items=(data.items||[]).filter(x=>x.ident);
+    empty.textContent=items.length?"":"Nič sa nenašlo.";
+    setStatus(items.length ? `Nájdené: ${items.length}` : "Nič sa nenašlo");
+    render();
+  }catch(e){
+    empty.textContent=e.message;
+    setStatus("Chyba");
+  }
+}
 
   try{
     const data=await api("/api/search?q="+encodeURIComponent(term));
