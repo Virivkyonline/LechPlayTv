@@ -4,261 +4,248 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>LechPlayTV</title>
-<link rel="manifest" href="manifest.json">
-<link rel="icon" href="icon.svg" type="image/svg+xml">
 
 <style>
-:root{--text:#f8fafc;--muted:#94a3b8;--line:rgba(255,255,255,.14);--a:#a855f7;--b:#6d28d9;--focus:rgba(168,85,247,.42)}
-body.theme-blue{--a:#38bdf8;--b:#2563eb;--focus:rgba(56,189,248,.42)}
-body.theme-gold{--a:#fbbf24;--b:#f59e0b;--focus:rgba(251,191,36,.42)}
-body.theme-green{--a:#34d399;--b:#16a34a;--focus:rgba(52,211,153,.42)}
-body.theme-red{--a:#fb7185;--b:#e11d48;--focus:rgba(251,113,133,.42)}
-body.theme-purple{--a:#a855f7;--b:#6d28d9;--focus:rgba(168,85,247,.42)}
-*{box-sizing:border-box}
-body{margin:0;color:var(--text);font-family:system-ui,Segoe UI,Arial,sans-serif;overflow:hidden;background:radial-gradient(950px 520px at 14% -5%,color-mix(in srgb,var(--a) 38%,transparent),transparent 62%),radial-gradient(850px 500px at 92% 0%,color-mix(in srgb,var(--b) 30%,transparent),transparent 60%),linear-gradient(180deg,#050814,#020617 72%,#000)}
-.app{height:100vh;display:grid;grid-template-rows:auto auto auto auto 1fr}
-.top{height:108px;display:flex;align-items:center;gap:22px;padding:22px 42px;border-bottom:1px solid var(--line);background:rgba(2,6,23,.78);backdrop-filter:blur(22px)}
-.logo{width:64px;height:64px;border-radius:24px;background:linear-gradient(135deg,var(--a),var(--b));display:grid;place-items:center;font-size:34px;font-weight:1000;box-shadow:0 18px 55px color-mix(in srgb,var(--b) 38%,transparent);cursor:pointer}
-h1{margin:0;font-size:38px;letter-spacing:-.04em}.subtitle{color:var(--muted);font-size:18px;font-weight:900;margin-top:3px}.status{margin-left:auto;color:var(--muted);font-weight:1000;font-size:18px}
-.themes{display:flex;gap:10px;padding:0 42px;margin-top:18px}.theme-dot{width:42px;height:42px;border-radius:999px;border:3px solid rgba(255,255,255,.28);padding:0}.theme-dot.active{border-color:#fff;box-shadow:0 0 0 5px var(--focus)}
-.t-purple{background:linear-gradient(135deg,#a855f7,#6d28d9)}.t-blue{background:linear-gradient(135deg,#38bdf8,#2563eb)}.t-gold{background:linear-gradient(135deg,#fbbf24,#f59e0b)}.t-green{background:linear-gradient(135deg,#34d399,#16a34a)}.t-red{background:linear-gradient(135deg,#fb7185,#e11d48)}
-.modebar{display:flex;gap:22px;padding:24px 42px 8px}
-button{font-size:26px;font-weight:1000;border:3px solid transparent;border-radius:28px;padding:20px 30px;color:#fff;background:rgba(255,255,255,.11);cursor:pointer;transition:.14s ease}
-.mode{min-width:245px;font-size:30px;padding:25px 30px;background:linear-gradient(135deg,rgba(255,255,255,.13),rgba(255,255,255,.055));border-color:var(--line)}
-.mode.active{background:linear-gradient(135deg,var(--a),var(--b));border-color:transparent;box-shadow:0 18px 60px color-mix(in srgb,var(--b) 36%,transparent)}
-.search{display:flex;gap:18px;padding:18px 42px 26px}
-input{flex:1;font-size:34px;padding:24px 30px;border-radius:30px;border:3px solid var(--line);background:rgba(255,255,255,.09);color:#fff;outline:none}
-.focused,input:focus,button:focus,.card.focused{outline:none;border-color:#fff!important;box-shadow:0 0 0 7px var(--focus),0 25px 80px rgba(0,0,0,.55);transform:scale(1.045);z-index:3}
-.content{padding:8px 42px 42px;overflow:auto}.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:28px;padding-bottom:80px}
-.card{height:340px;position:relative;border:3px solid transparent;border-radius:32px;background:linear-gradient(180deg,rgba(255,255,255,.11),rgba(255,255,255,.045));overflow:hidden;transition:.14s ease}
-.poster{height:246px;display:grid;place-items:center;background:linear-gradient(135deg,color-mix(in srgb,var(--a) 20%,transparent),rgba(255,255,255,.04));font-size:78px}
-.poster img{width:100%;height:100%;object-fit:cover}.title{padding:17px;font-size:22px;font-weight:1000;line-height:1.18;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.star{position:absolute;top:12px;right:12px;width:52px;height:52px;border-radius:18px;background:rgba(0,0,0,.62);display:grid;place-items:center;font-size:29px;border:1px solid rgba(255,255,255,.24)}.star.on{color:#fbbf24}
-.empty{font-size:36px;color:var(--muted);padding:70px;text-align:center;font-weight:700}
-.player{position:fixed;inset:0;background:#000;z-index:50;display:none}.player.active{display:block}
-video{width:100%;height:100%;background:#000}
-.backBtn{position:absolute;top:24px;left:24px;z-index:60;background:rgba(0,0,0,.68);border:2px solid rgba(255,255,255,.28);border-radius:22px;padding:16px 24px;font-size:24px}
-.progress{position:absolute;left:26px;right:26px;bottom:0;height:8px;background:rgba(255,255,255,.22);border-radius:999px;overflow:hidden}.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--a),var(--b))}
-.pinOverlay{position:fixed;inset:0;z-index:80;display:none;place-items:center;background:rgba(0,0,0,.78);backdrop-filter:blur(16px)}.pinOverlay.active{display:grid}
-.pinBox{width:min(520px,90vw);padding:34px;border-radius:34px;background:linear-gradient(180deg,rgba(255,255,255,.14),rgba(255,255,255,.06));border:1px solid var(--line);box-shadow:0 30px 100px rgba(0,0,0,.6)}
-.pinBox h2{margin:0 0 22px;font-size:34px}.pinBox input{width:100%;margin-bottom:18px}.pinActions{display:flex;gap:14px}.pinActions button{flex:1}
-.secretOverlay{position:fixed;inset:0;z-index:75;display:none;background:linear-gradient(180deg,#050814,#000);padding:50px}.secretOverlay.active{display:block}
-.secretBox{max-width:900px;margin:0 auto;padding:38px;border-radius:34px;border:1px solid var(--line);background:rgba(255,255,255,.08)}
-@media(max-width:1200px){.grid{grid-template-columns:repeat(4,1fr)}.card{height:320px}.poster{height:228px}.mode{min-width:210px}}
+body{
+  margin:0;
+  font-family:Arial;
+  background:#0b0b0f;
+  color:#fff;
+  overflow:auto;
+}
+
+/* HEADER */
+.header{
+  display:flex;
+  align-items:center;
+  padding:15px 25px;
+  background:#000;
+  position:sticky;
+  top:0;
+  z-index:10;
+}
+.logo{
+  font-size:26px;
+  font-weight:bold;
+  color:red;
+  cursor:pointer;
+}
+.search{
+  margin-left:20px;
+  flex:1;
+}
+.search input{
+  width:100%;
+  padding:10px;
+  font-size:18px;
+}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+  gap:15px;
+  padding:20px;
+}
+.card{
+  background:#111;
+  border-radius:12px;
+  overflow:hidden;
+  cursor:pointer;
+  transition:.2s;
+}
+.card:hover{
+  transform:scale(1.05);
+}
+.card img{
+  width:100%;
+  height:260px;
+  object-fit:cover;
+}
+.title{
+  padding:10px;
+}
+
+/* PLAYER */
+.player{
+  position:fixed;
+  inset:0;
+  background:#000;
+  display:none;
+  flex-direction:column;
+  z-index:50;
+}
+.player video{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+}
+
+/* CONTROLS */
+.controls{
+  position:absolute;
+  bottom:20px;
+  width:100%;
+  display:flex;
+  justify-content:center;
+  gap:20px;
+}
+.controls button{
+  font-size:20px;
+  padding:12px 18px;
+}
+
+/* OVERLAYS */
+.overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.9);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  z-index:60;
+}
+.overlay.active{display:flex;}
+
+button{
+  font-size:18px;
+  padding:10px 20px;
+  margin:10px;
+}
 </style>
 </head>
 
-<body class="theme-purple">
-<div class="app">
-<header class="top">
-  <div class="logo" id="logo">▶</div>
-  <div><h1>LechPlayTV</h1><div class="subtitle">TV režim bez myši</div></div>
-  <div class="status" id="status">Vyber Filmy, Hudba alebo Obľúbené</div>
-</header>
+<body>
 
-<section class="themes">
-  <button class="theme-dot t-purple active" data-theme="purple"></button>
-  <button class="theme-dot t-blue" data-theme="blue"></button>
-  <button class="theme-dot t-gold" data-theme="gold"></button>
-  <button class="theme-dot t-green" data-theme="green"></button>
-  <button class="theme-dot t-red" data-theme="red"></button>
-</section>
-
-<section class="modebar">
-  <button id="videoBtn" class="mode active">🎬 Filmy</button>
-  <button id="audioBtn" class="mode">🎵 Hudba</button>
-  <button id="favBtn" class="mode">⭐ Obľúbené</button>
-</section>
-
-<section class="search">
-  <input id="q" name="lechplay-tv-search-field" type="search" placeholder="Hľadať film..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" readonly>
-  <button id="searchBtn">Hľadať</button>
-</section>
-
-<main class="content">
-  <div class="grid" id="grid"></div>
-  <div class="empty" id="empty">Zadaj názov filmu.</div>
-</main>
+<div class="header">
+  <div class="logo" id="logo">LECHPLAY</div>
+  <div class="search">
+    <input id="q" placeholder="Hľadať...">
+  </div>
+  <button onclick="search()">Hľadať</button>
 </div>
 
-<section class="player" id="player">
-  <button class="backBtn" id="backBtn">← Späť</button>
-  <video id="video" autoplay playsinline controls></video>
-  <div class="progress"><span id="bar"></span></div>
-</section>
+<div class="grid" id="grid"></div>
 
-<div class="pinOverlay" id="pinOverlay">
-  <div class="pinBox">
-    <h2>🔒 Tajné menu</h2>
-    <input id="pinInput" type="password" placeholder="PIN" inputmode="numeric" autocomplete="off">
-    <div class="pinActions">
-      <button id="pinOk">OK</button>
-      <button id="pinCancel">Zrušiť</button>
-    </div>
+<!-- PLAYER -->
+<div class="player" id="player">
+  <video id="video" controls></video>
+  <div class="controls">
+    <button onclick="back()">🔙</button>
+    <button onclick="seek(-10)">⏪ 10s</button>
+    <button onclick="toggle()">▶️/⏸</button>
+    <button onclick="seek(10)">⏩ 10s</button>
+    <button onclick="stop()">⏹</button>
   </div>
 </div>
 
-<div class="secretOverlay" id="secretOverlay">
-  <div class="secretBox">
-    <h1>🔓 Tajné menu</h1>
-    <p style="font-size:24px;color:var(--muted)">Sem môžeš neskôr pridať nastavenia, skryté zdroje alebo administráciu.</p>
-    <button id="secretClose">← Zavrieť</button>
-  </div>
+<!-- PIN -->
+<div class="overlay" id="pinBox">
+  <h2>Zadaj PIN</h2>
+  <input id="pin" type="password">
+  <button onclick="checkPin()">OK</button>
+</div>
+
+<!-- AGE -->
+<div class="overlay" id="ageBox">
+  <h2>Máš viac ako 18 rokov?</h2>
+  <button onclick="enterAdult()">ÁNO</button>
+  <button onclick="closeOverlay()">NIE</button>
 </div>
 
 <script>
-const API_BASE="https://websharetv-worker.virivkyonlinecz.workers.dev";
-const SECRET_PIN="7808";
+const API="https://websharetv-worker.virivkyonlinecz.workers.dev";
 
 let items=[];
-let category="video";
-let focusIndex=-2;
-let favorites=JSON.parse(localStorage.getItem("lechplay_favorites")||"[]");
-
-const q=document.getElementById("q"),searchBtn=document.getElementById("searchBtn"),videoBtn=document.getElementById("videoBtn"),audioBtn=document.getElementById("audioBtn"),favBtn=document.getElementById("favBtn"),grid=document.getElementById("grid"),empty=document.getElementById("empty"),statusEl=document.getElementById("status"),player=document.getElementById("player"),video=document.getElementById("video"),bar=document.getElementById("bar"),backBtn=document.getElementById("backBtn"),logo=document.getElementById("logo"),pinOverlay=document.getElementById("pinOverlay"),pinInput=document.getElementById("pinInput"),pinOk=document.getElementById("pinOk"),pinCancel=document.getElementById("pinCancel"),secretOverlay=document.getElementById("secretOverlay"),secretClose=document.getElementById("secretClose");
-
-function esc(s){return String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-function api(path){return fetch(API_BASE+path,{headers:{accept:"application/json"}}).then(r=>r.json())}
-function setStatus(t){statusEl.textContent=t}
-function saveFavorites(){localStorage.setItem("lechplay_favorites",JSON.stringify(favorites))}
-function isFav(it){return !!favorites.find(f=>f.ident===it.ident)}
-
-function clearSearchBox(){
-  q.value="";
-}
-
-function enableSearchInput(){
-  q.removeAttribute("readonly");
-  setTimeout(()=>q.focus(),30);
-}
-
-q.addEventListener("focus",enableSearchInput);
-q.addEventListener("click",enableSearchInput);
-
-function toggleFav(it){
-  if(!it||!it.ident)return;
-  if(isFav(it)){favorites=favorites.filter(f=>f.ident!==it.ident);setStatus("Odstránené z obľúbených")}
-  else{favorites.unshift({ident:it.ident,title:it.title||it.name||"Bez názvu",name:it.name||it.title||"Bez názvu",image:it.image||"",category:it.category||category});setStatus("Pridané do obľúbených")}
-  saveFavorites();
-  if(category==="favorites")items=[...favorites];
-  render(false);
-}
-
-function setTheme(theme){
-  document.body.className="theme-"+theme;
-  localStorage.setItem("lechplay_theme",theme);
-  document.querySelectorAll(".theme-dot").forEach(d=>d.classList.toggle("active",d.dataset.theme===theme));
-}
-document.querySelectorAll(".theme-dot").forEach(d=>d.onclick=()=>setTheme(d.dataset.theme));
-setTheme(localStorage.getItem("lechplay_theme")||"purple");
-
-function setCategory(cat){
-  category=cat;videoBtn.classList.toggle("active",cat==="video");audioBtn.classList.toggle("active",cat==="audio");favBtn.classList.toggle("active",cat==="favorites");
-  grid.innerHTML="";items=[];empty.style.display="block";
-  if(cat==="video"){q.disabled=false;q.placeholder="Hľadať film...";empty.textContent="Zadaj názov filmu.";setStatus("🎬 Filmy")}
-  if(cat==="audio"){q.disabled=false;q.placeholder="Hľadať hudbu...";empty.textContent="Zadaj názov skladby alebo interpreta.";setStatus("🎵 Hudba")}
-  if(cat==="favorites"){q.disabled=true;q.placeholder="Obľúbené";clearSearchBox();items=[...favorites];empty.textContent=favorites.length?"":"Zatiaľ nemáš žiadne obľúbené.";setStatus("⭐ Obľúbené: "+favorites.length);render();return}
-  updateFocus();
-}
-
-function render(resetFocus=true){
-  grid.innerHTML="";empty.style.display=items.length?"none":"block";
-  items.forEach((it,i)=>{
-    const el=document.createElement("article");el.className="card";el.dataset.index=i;
-    const icon=(it.category||category)==="audio"?"🎵":"▶";
-    el.innerHTML=`<div class="poster">${it.image?`<img src="${esc(it.image)}">`:icon}</div><div class="star ${isFav(it)?"on":""}">${isFav(it)?"★":"☆"}</div><div class="title">${esc(it.title||it.name||"Bez názvu")}</div>`;
-    el.onclick=e=>{if(e.target.classList.contains("star")){e.stopPropagation();focusIndex=i;toggleFav(it);return}focusIndex=i;updateFocus();playItem(it)};
-    grid.appendChild(el);
-  });
-  if(items.length&&resetFocus)focusIndex=0;
-  updateFocus();
-}
-
-function updateFocus(){
-  videoBtn.classList.toggle("focused",focusIndex===-5);audioBtn.classList.toggle("focused",focusIndex===-4);favBtn.classList.toggle("focused",focusIndex===-3);q.classList.toggle("focused",focusIndex===-2);searchBtn.classList.toggle("focused",focusIndex===-1);
-  document.querySelectorAll(".card").forEach(card=>card.classList.toggle("focused",Number(card.dataset.index)===focusIndex));
-  const active=document.querySelector(".card.focused");if(active)active.scrollIntoView({block:"nearest",inline:"nearest"});
-}
+let clicks=0;
+let adult=false;
 
 async function search(){
-  if(category==="favorites"){setCategory("favorites");return}
-  const term=q.value.trim();if(!term){setStatus(category==="audio"?"Zadaj názov hudby":"Zadaj názov filmu");return}
-  setStatus(category==="audio"?"Hľadám hudbu...":"Hľadám filmy...");empty.style.display="block";empty.textContent="Hľadám...";grid.innerHTML="";items=[];
-  try{const data=await api("/api/search?q="+encodeURIComponent(term)+"&category="+encodeURIComponent(category));if(data.error)throw new Error(data.message);items=(data.items||[]).filter(x=>x.ident).map(x=>({...x,category}));empty.textContent=items.length?"":"Nič sa nenašlo.";setStatus(items.length?`Nájdené: ${items.length} · OK prehrá · 0 pridá do obľúbených`:"Nič sa nenašlo");render()}
-  catch(e){empty.textContent=e.message;setStatus("Chyba")}
+  let q=document.getElementById("q").value;
+  let cat=adult?"adult":"video";
+
+  let res=await fetch(API+"/api/search?q="+q+"&category="+cat);
+  let data=await res.json();
+
+  items=data.items||[];
+  render();
 }
 
-async function playItem(it){
-  if(!it||!it.ident)return;
-  setStatus("Načítavam prehrávanie...");player.classList.add("active");video.removeAttribute("src");video.load();
-  try{const data=await api("/api/play?ident="+encodeURIComponent(it.ident));if(data.error)throw new Error(data.message);const src=data.proxyUrl?API_BASE+data.proxyUrl:data.videoUrl;if(!src)throw new Error("Link sa nenašiel.");video.src=src;await video.play().catch(()=>{})}
-  catch(e){closePlayer();setStatus(e.message)}
+function render(){
+  let grid=document.getElementById("grid");
+  grid.innerHTML="";
+  items.forEach(it=>{
+    let d=document.createElement("div");
+    d.className="card";
+    d.innerHTML=`
+      <img src="${it.image||""}">
+      <div class="title">${it.title||it.name}</div>
+    `;
+    d.onclick=()=>play(it);
+    grid.appendChild(d);
+  });
 }
 
-function closePlayer(){video.pause();video.removeAttribute("src");video.load();player.classList.remove("active");updateFocus()}
+async function play(it){
+  let res=await fetch(API+"/api/play?ident="+it.ident);
+  let data=await res.json();
 
-function activate(){
-  if(player.classList.contains("active")){
-    if(video.paused){video.play().catch(()=>{})}else{video.pause()}
-    return;
+  let src=data.proxyUrl?API+data.proxyUrl:data.videoUrl;
+
+  let video=document.getElementById("video");
+  video.src=src;
+
+  document.getElementById("player").style.display="flex";
+  video.play();
+}
+
+/* PLAYER */
+function back(){
+  stop();
+}
+function stop(){
+  let v=document.getElementById("video");
+  v.pause();
+  v.src="";
+  document.getElementById("player").style.display="none";
+}
+function toggle(){
+  let v=document.getElementById("video");
+  v.paused?v.play():v.pause();
+}
+function seek(s){
+  let v=document.getElementById("video");
+  v.currentTime+=s;
+}
+
+/* SECRET */
+document.getElementById("logo").onclick=()=>{
+  clicks++;
+  if(clicks>=5){
+    document.getElementById("pinBox").classList.add("active");
+    clicks=0;
   }
-  if(focusIndex===-5){setCategory("video");return}
-  if(focusIndex===-4){setCategory("audio");return}
-  if(focusIndex===-3){setCategory("favorites");return}
-  if(focusIndex===-2){enableSearchInput();return}
-  if(focusIndex===-1){search();return}
-  if(focusIndex>=0&&items[focusIndex])playItem(items[focusIndex]);
-}
+};
 
-function move(dx,dy){
-  if(player.classList.contains("active"))return;const cols=5;
-  if(dy>0){if(focusIndex===-5||focusIndex===-4||focusIndex===-3)focusIndex=-2;else if(focusIndex===-2||focusIndex===-1){if(items.length)focusIndex=0}else focusIndex=Math.min(items.length-1,focusIndex+cols)}
-  if(dy<0){if(focusIndex>=0&&focusIndex<cols)focusIndex=-2;else if(focusIndex>=cols)focusIndex=Math.max(0,focusIndex-cols);else if(focusIndex===-2||focusIndex===-1)focusIndex=-5}
-  if(dx>0){if(focusIndex===-5)focusIndex=-4;else if(focusIndex===-4)focusIndex=-3;else if(focusIndex===-2)focusIndex=-1;else if(focusIndex>=0)focusIndex=Math.min(items.length-1,focusIndex+1)}
-  if(dx<0){if(focusIndex===-4)focusIndex=-5;else if(focusIndex===-3)focusIndex=-4;else if(focusIndex===-1)focusIndex=-2;else if(focusIndex>0)focusIndex--}
-  updateFocus();
-}
-
-function openPin(){pinOverlay.classList.add("active");pinInput.value="";setTimeout(()=>pinInput.focus(),50)}
-function closePin(){pinOverlay.classList.remove("active");pinInput.value="";updateFocus()}
-function unlockSecret(){if(pinInput.value===SECRET_PIN){closePin();secretOverlay.classList.add("active");setStatus("🔓 Tajné menu otvorené")}else{pinInput.value="";setStatus("Nesprávny PIN")}}
-
-document.addEventListener("keydown",e=>{
-  const key=e.key;
-  if(pinOverlay.classList.contains("active"))return;
-  if(secretOverlay.classList.contains("active")){if(key==="Escape"||key==="Backspace"||key==="BrowserBack"||key==="GoBack"){e.preventDefault();secretOverlay.classList.remove("active")}return}
-  if(player.classList.contains("active")){
-    if(key==="Enter"||key===" "||key==="MediaPlayPause"){e.preventDefault();activate()}
-    if(key==="Escape"||key==="Backspace"||key==="BrowserBack"||key==="GoBack"||key==="SoftLeft"){e.preventDefault();e.stopPropagation();closePlayer()}
-    if(key==="ArrowRight"){e.preventDefault();video.currentTime=Math.min(video.duration||video.currentTime+10,video.currentTime+10)}
-    if(key==="ArrowLeft"){e.preventDefault();video.currentTime=Math.max(0,video.currentTime-10)}
-    if(key==="ArrowUp"){e.preventDefault();video.volume=Math.min(1,video.volume+.1)}
-    if(key==="ArrowDown"){e.preventDefault();video.volume=Math.max(0,video.volume-.1)}
-    return;
+function checkPin(){
+  if(document.getElementById("pin").value==="7808"){
+    document.getElementById("pinBox").classList.remove("active");
+    document.getElementById("ageBox").classList.add("active");
   }
-  if(key==="ArrowRight"){e.preventDefault();move(1,0)}
-  if(key==="ArrowLeft"){e.preventDefault();move(-1,0)}
-  if(key==="ArrowDown"){e.preventDefault();move(0,1)}
-  if(key==="ArrowUp"){e.preventDefault();move(0,-1)}
-  if(key==="Enter"){e.preventDefault();activate()}
-  if(key==="0"||key==="f"||key==="F"||key==="ColorF0Yellow"){e.preventDefault();if(focusIndex>=0&&items[focusIndex])toggleFav(items[focusIndex])}
-  if(key==="Escape"||key==="Backspace"||key==="BrowserBack"||key==="GoBack"){e.preventDefault();focusIndex=-5;updateFocus()}
-});
+}
 
-video.addEventListener("timeupdate",()=>{if(video.duration)bar.style.width=((video.currentTime/video.duration)*100)+"%"});
-q.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();e.stopPropagation();search()}});
-pinInput.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();unlockSecret()}if(e.key==="Escape"||e.key==="Backspace"){e.preventDefault();closePin()}});
+function enterAdult(){
+  adult=true;
+  closeOverlay();
+  alert("🔞 Režim aktivovaný");
+}
 
-videoBtn.onclick=()=>setCategory("video");audioBtn.onclick=()=>setCategory("audio");favBtn.onclick=()=>setCategory("favorites");searchBtn.onclick=search;
-backBtn.onclick=closePlayer;logo.onclick=openPin;pinOk.onclick=unlockSecret;pinCancel.onclick=closePin;secretClose.onclick=()=>secretOverlay.classList.remove("active");
-
-setCategory("video");
-clearSearchBox();
-setTimeout(clearSearchBox,100);
-setTimeout(clearSearchBox,500);
-focusIndex=-2;
-q.blur();
-updateFocus();
+function closeOverlay(){
+  document.getElementById("ageBox").classList.remove("active");
+  document.getElementById("pinBox").classList.remove("active");
+}
 </script>
+
 </body>
 </html>
