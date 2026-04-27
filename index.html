@@ -401,6 +401,11 @@ function render(){
       <div class="poster">${it.image ? `<img src="${esc(it.image)}">` : icon}</div>
       <div class="title">${esc(it.title||it.name||"Bez názvu")}</div>
     `;
+    el.onclick=()=>{
+  focusIndex=i;
+  updateFocus();
+  playItem(it);
+};
 
     grid.appendChild(el);
   });
