@@ -2,534 +2,248 @@
 <html lang="sk">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>LechPlayTv</title>
-<meta name="theme-color" content="#0f172a">
-<link rel="manifest" href="manifest.json">
-<link rel="icon" href="icon.svg" type="image/svg+xml">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LechPlayTV</title>
 <style>
-:root{--bg:#070b18;--text:#f8fafc;--muted:#9ca3af;--line:rgba(255,255,255,.13);--a:#8b5cf6;--b:#a855f7;--c:#6d28d9;--shadow:0 25px 90px rgba(0,0,0,.45);--radius:28px}
-body.theme-blue{--a:#38bdf8;--b:#2563eb;--c:#1d4ed8}body.theme-gold{--a:#fbbf24;--b:#f59e0b;--c:#b45309}body.theme-green{--a:#34d399;--b:#16a34a;--c:#047857}body.theme-purple{--a:#c084fc;--b:#7c3aed;--c:#5b21b6}body.theme-red{--a:#fb7185;--b:#e11d48;--c:#991b1b}
+:root{--bg:#050814;--text:#f8fafc;--muted:#94a3b8;--line:rgba(255,255,255,.14);--a:#a855f7;--b:#6d28d9}
 *{box-sizing:border-box}
-body{margin:0;color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:radial-gradient(900px 520px at 10% -10%,color-mix(in srgb,var(--a) 35%,transparent),transparent 60%),radial-gradient(850px 520px at 95% 0%,color-mix(in srgb,var(--b) 32%,transparent),transparent 58%),linear-gradient(180deg,#060a15,var(--bg) 45%,#030712);overflow-x:hidden}
-.shell{max-width:1320px;margin:0 auto;padding:22px clamp(16px,4vw,48px) 70px}
-.top{position:sticky;top:0;z-index:20;margin:-22px calc(clamp(16px,4vw,48px)*-1) 24px;padding:18px clamp(16px,4vw,48px);display:flex;align-items:center;gap:14px;background:rgba(3,7,18,.78);backdrop-filter:blur(22px);border-bottom:1px solid var(--line)}
-.brand{display:flex;align-items:center;gap:13px}
-.mark{width:54px;height:54px;border-radius:20px;background:linear-gradient(135deg,var(--a),var(--b),var(--c));display:grid;place-items:center;font-size:28px;font-weight:1000}
-.title h1{margin:0;font-size:25px}
-.title p{margin:5px 0 0;color:var(--muted);font-size:13px}
-.spacer{flex:1}
-.theme-switcher{display:flex;gap:9px;padding:8px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.06)}
-.dot{width:25px;height:25px;border-radius:50%;border:2px solid rgba(255,255,255,.55);cursor:pointer}
-.dot.active{outline:3px solid rgba(255,255,255,.22)}
-.gold{background:linear-gradient(135deg,#fbbf24,#b45309)}
-.blue{background:linear-gradient(135deg,#38bdf8,#1d4ed8)}
-.green{background:linear-gradient(135deg,#34d399,#047857)}
-.purple{background:linear-gradient(135deg,#c084fc,#5b21b6)}
-.red{background:linear-gradient(135deg,#fb7185,#991b1b)}
-.btn,.iconbtn{border:1px solid var(--line);background:rgba(255,255,255,.08);color:var(--text);border-radius:18px;padding:13px 16px;font-weight:900;cursor:pointer}
-.btn.primary{border:0;background:linear-gradient(135deg,var(--a),var(--b));box-shadow:0 18px 45px color-mix(in srgb,var(--b) 32%,transparent)}
-.hero{display:grid;grid-template-columns:1.08fr .92fr;gap:22px;margin-top:22px}
-.card{border:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.105),rgba(255,255,255,.045));border-radius:var(--radius);box-shadow:var(--shadow)}
-.intro{padding:34px;min-height:365px;display:flex;flex-direction:column;justify-content:center}
-.eyebrow{width:max-content;font-weight:900;background:rgba(255,255,255,.10);border:1px solid var(--line);padding:9px 13px;border-radius:999px}
-h2{font-size:clamp(38px,6.5vw,78px);line-height:.94;margin:20px 0 16px;letter-spacing:-.05em}
-.intro p{color:var(--muted);font-size:18px;line-height:1.55}
-.sections{padding:24px;display:grid;gap:16px}
-.section-card{position:relative;overflow:hidden;text-align:left;border:1px solid var(--line);border-radius:26px;padding:24px;min-height:145px;cursor:pointer;background:linear-gradient(135deg,rgba(255,255,255,.12),rgba(255,255,255,.04));transition:.18s}
-.section-card:hover{transform:translateY(-5px);border-color:var(--a)}
-.section-card.active{border-color:var(--a);box-shadow:0 0 0 4px color-mix(in srgb,var(--a) 18%,transparent)}
-.bigicon{font-size:52px;margin-bottom:13px;display:block}
-.section-card h3{font-size:29px;margin:0}
-.toolbar{display:flex;gap:12px;margin:24px 0 18px}
-.search{flex:1;display:flex;gap:10px;background:rgba(255,255,255,.07);border:1px solid var(--line);border-radius:22px;padding:8px}
-input{width:100%;border:0;background:transparent;color:var(--text);font-size:16px;padding:12px;outline:none}
-.content-head h3{font-size:28px;margin:0 0 16px}
-.category-row{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 20px}
-.category-btn{border:1px solid var(--line);background:rgba(255,255,255,.07);color:var(--text);border-radius:999px;padding:10px 14px;font-weight:900;cursor:pointer;transition:.18s}
-.category-btn:hover{transform:translateY(-2px);border-color:var(--a)}
-.category-btn.active{background:linear-gradient(135deg,var(--a),var(--b));border-color:transparent;box-shadow:0 12px 30px color-mix(in srgb,var(--b) 25%,transparent)}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:18px}
-.item{border:1px solid var(--line);background:rgba(255,255,255,.06);border-radius:22px;overflow:hidden;cursor:pointer;transition:.18s}
-.item:hover{transform:translateY(-5px);border-color:var(--a)}
-.poster{aspect-ratio:2/3;background:linear-gradient(135deg,rgba(255,255,255,.09),rgba(255,255,255,.03));display:grid;place-items:center;font-size:48px}
+body{margin:0;background:radial-gradient(900px 500px at 20% 0%,rgba(168,85,247,.28),transparent 60%),linear-gradient(180deg,#050814,#020617);color:var(--text);font-family:system-ui,Segoe UI,Arial,sans-serif;overflow:hidden}
+.app{height:100vh;display:grid;grid-template-rows:auto auto 1fr}
+.top{height:96px;display:flex;align-items:center;gap:22px;padding:22px 42px;border-bottom:1px solid var(--line);background:rgba(2,6,23,.78)}
+.logo{width:58px;height:58px;border-radius:22px;background:linear-gradient(135deg,var(--a),var(--b));display:grid;place-items:center;font-size:30px;font-weight:1000}
+h1{margin:0;font-size:34px}
+.status{margin-left:auto;color:var(--muted);font-weight:800}
+.search{display:flex;gap:16px;padding:24px 42px}
+input{flex:1;font-size:32px;padding:22px 26px;border-radius:26px;border:3px solid transparent;background:rgba(255,255,255,.09);color:#fff;outline:none}
+button{font-size:26px;font-weight:1000;border:0;border-radius:26px;padding:20px 28px;color:#fff;background:rgba(255,255,255,.12)}
+.focused,input:focus,button:focus,.card.focused{outline:none;border-color:#fff!important;box-shadow:0 0 0 7px rgba(168,85,247,.42),0 22px 70px rgba(0,0,0,.5);transform:scale(1.06)}
+.content{padding:4px 42px 42px;overflow:hidden}
+.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:28px}
+.card{height:330px;border:3px solid transparent;border-radius:30px;background:rgba(255,255,255,.075);overflow:hidden;transition:.12s}
+.poster{height:240px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(255,255,255,.12),rgba(255,255,255,.04));font-size:70px}
 .poster img{width:100%;height:100%;object-fit:cover}
-.meta{padding:14px}
-.meta h4{margin:0;font-size:15px;line-height:1.28}
-.empty{padding:38px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:24px;background:rgba(255,255,255,.035)}
-.player{position:fixed;inset:0;background:#020617;z-index:100;display:none}
-.player.active{display:grid;grid-template-rows:auto 1fr}
-.playerbar{display:flex;gap:12px;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line);background:rgba(3,7,18,.95)}
-.playerframe{width:100%;height:100%;border:0;background:#000}
-.player video{width:100%;height:100%;background:#000}
-.toast{position:fixed;z-index:140;left:50%;bottom:22px;transform:translateX(-50%);background:#0b1424;border:1px solid var(--line);padding:12px 16px;border-radius:999px;display:none}
-.video-wrap{position:relative;width:100%;height:100%;background:#000}
-.video-wrap video{width:100%;height:100%;background:#000;outline:none}
-.tv-hint{position:absolute;right:18px;bottom:18px;z-index:8;padding:12px 16px;border-radius:18px;background:rgba(0,0,0,.62);border:1px solid rgba(255,255,255,.18);color:#fff;font-weight:900;font-size:14px;line-height:1.45;box-shadow:0 12px 35px rgba(0,0,0,.42);pointer-events:none}
-.tv-progress{position:absolute;left:18px;right:18px;bottom:0;height:6px;background:rgba(255,255,255,.18);border-radius:999px;overflow:hidden;z-index:9}
-.tv-progress span{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--a),var(--b));border-radius:999px}
-.player-logo{position:absolute;top:16px;left:16px;z-index:5;padding:9px 14px;border-radius:16px;background:rgba(0,0,0,.58);color:#fff;font-weight:1000;font-size:15px;letter-spacing:.2px;border:1px solid rgba(255,255,255,.18);box-shadow:0 10px 30px rgba(0,0,0,.45);opacity:1;transition:opacity .28s ease;pointer-events:none}
-@media(max-width:820px){.hero{grid-template-columns:1fr}.top{padding:12px 14px}.title p{display:none}.theme-switcher{position:fixed;right:12px;bottom:14px}.toolbar{flex-direction:column}.search{width:100%}.category-row{overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px}.category-btn{white-space:nowrap}}
+.title{padding:16px;font-size:22px;font-weight:900;line-height:1.18;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.empty{font-size:34px;color:var(--muted);padding:60px;text-align:center}
+.player{position:fixed;inset:0;background:#000;z-index:50;display:none}
+.player.active{display:block}
+video{width:100%;height:100%;background:#000}
+.hint{position:absolute;right:24px;bottom:26px;background:rgba(0,0,0,.62);border:1px solid rgba(255,255,255,.2);border-radius:22px;padding:16px 22px;font-size:20px;font-weight:900}
+.progress{position:absolute;left:26px;right:26px;bottom:0;height:8px;background:rgba(255,255,255,.22);border-radius:999px;overflow:hidden}
+.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--a),var(--b))}
+@media(max-width:1100px){.grid{grid-template-columns:repeat(4,1fr)}.card{height:300px}.poster{height:215px}}
 </style>
 </head>
-<body class="theme-purple">
-<div class="shell">
-<header class="top"><div class="brand"><div class="mark">▶</div><div class="title"><h1>LechPlayTv</h1><p>filmy a seriály</p></div></div><div class="spacer"></div><div class="theme-switcher"><button class="dot gold" data-theme="gold"></button><button class="dot blue" data-theme="blue"></button><button class="dot green" data-theme="green"></button><button class="dot purple active" data-theme="purple"></button><button class="dot red" data-theme="red"></button></div><button class="iconbtn" id="refreshBtn">↻</button></header>
-<section class="hero"><article class="card intro"><span class="eyebrow">✨ LechPlay</span><h2>Vyber si obsah.</h2><p>Vyber kategóriu alebo použi vyhľadávanie.</p><div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:24px"><button class="btn primary" onclick="selectSection('movies')">🎬 Filmy</button><button class="btn" onclick="selectSection('series')">📺 Seriály</button></div></article><aside class="card sections"><article class="section-card active" data-section="movies" onclick="selectSection('movies')"><span class="bigicon">🎬</span><h3>Filmy</h3></article><article class="section-card" data-section="series" onclick="selectSection('series')"><span class="bigicon">📺</span><h3>Seriály</h3></article></aside></section>
-<div class="toolbar"><div class="search"><input id="q" placeholder="Hľadať..." /><button class="btn primary" id="searchBtn">Hľadať</button></div><button class="btn" id="homeBtn">Domov</button></div>
-<div class="content-head"><h3 id="sectionTitle">🎬 Filmy</h3></div>
-<div class="category-row" id="categoryRow"></div>
-<section class="grid" id="grid"></section><div class="empty" id="empty">Načítavam...</div></div>
-<section class="player" id="player"><div class="playerbar"><button class="btn" id="closePlayer">✕ Zavrieť</button><b id="playerTitle">Prehrávač</b><div class="spacer"></div><button class="btn" id="reloadPlayer">↻</button></div><div id="playerBody"></div></section><div class="toast" id="toast"></div>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="logo">▶</div>
+    <div>
+      <h1>LechPlayTV</h1>
+      <div style="color:var(--muted);font-size:18px;font-weight:800">TV režim bez myši</div>
+    </div>
+    <div class="status" id="status">Napíš názov a stlač OK</div>
+  </header>
+
+  <section class="search">
+    <input id="q" placeholder="Hľadať film..." autocomplete="off">
+    <button id="searchBtn">Hľadať</button>
+  </section>
+
+  <main class="content">
+    <div class="grid" id="grid"></div>
+    <div class="empty" id="empty">Zadaj názov filmu.</div>
+  </main>
+</div>
+
+<section class="player" id="player">
+  <video id="video" autoplay playsinline></video>
+  <div class="hint">OK: play/pause · ◀ ▶: ±10s · ▲ ▼: hlasitosť · Back: zavrieť</div>
+  <div class="progress"><span id="bar"></span></div>
+</section>
 
 <script>
-const API_BASE = "https://webshare-worker.virivkyonlinecz.workers.dev/";
-const SOURCES={movies:{title:"🎬 Filmy",base:"https://movies.sosac.tv"},series:{title:"📺 Seriály",base:"https://tv.sosac.tv"}};
+const API_BASE="https://websharetv-worker.virivkyonlinecz.workers.dev";
+let items=[];
+let focusIndex=-2; // -2 input, -1 search button, 0+ cards
+let playing=null;
 
-const CATEGORIES={
-  movies:[
-    {label:"Domov",path:"/cs/"},
-    {label:"Najobľúbenejšie",path:"/cs/most-popular"},
-    {label:"Novinky",path:"/cs/recently-added"},
-    {label:"Zoznam filmov",path:"/cs/movies-a-z"},
-    {label:"Akčné",path:"/cs/channel/action"},
-    {label:"Dobrodružné",path:"/cs/channel/adventure"},
-    {label:"Animované",path:"/cs/channel/animation"},
-    {label:"Biografie",path:"/cs/channel/biography"},
-    {label:"Kreslené",path:"/cs/channel/cartoons"},
-    {label:"Komédie",path:"/cs/channel/comedy"},
-    {label:"Krimi",path:"/cs/channel/crime"},
-    {label:"Katastrofické",path:"/cs/channel/disaster"},
-    {label:"Dokumentárne",path:"/cs/channel/documentary"},
-    {label:"Dráma",path:"/cs/channel/drama"},
-    {label:"Erotické",path:"/cs/channel/erotic"},
-    {label:"Fantasy",path:"/cs/channel/fantasy"},
-    {label:"Horor",path:"/cs/channel/horror"},
-    {label:"Romantické",path:"/cs/channel/romance"},
-    {label:"Sci-Fi",path:"/cs/channel/sci-fi"},
-    {label:"Thriller",path:"/cs/channel/thriller"},
-    {label:"Vojnové",path:"/cs/channel/war"},
-    {label:"Western",path:"/cs/channel/western"}
-  ],
-  series:[
-    {label:"Domov",path:"/cs/"},
-    {label:"Najobľúbenejšie",path:"/cs/most-popular"},
-    {label:"Novinky",path:"/cs/recently-added"},
-    {label:"Akčné",path:"/cs/channel/action"},
-    {label:"Dobrodružné",path:"/cs/channel/adventure"},
-    {label:"Animované",path:"/cs/channel/animation"},
-    {label:"Komédie",path:"/cs/channel/comedy"},
-    {label:"Krimi",path:"/cs/channel/crime"},
-    {label:"Dráma",path:"/cs/channel/drama"},
-    {label:"Fantasy",path:"/cs/channel/fantasy"},
-    {label:"Horor",path:"/cs/channel/horror"},
-    {label:"Romantické",path:"/cs/channel/romance"},
-    {label:"Sci-Fi",path:"/cs/channel/sci-fi"},
-    {label:"Thriller",path:"/cs/channel/thriller"}
-  ]
-};
+const q=document.getElementById("q");
+const searchBtn=document.getElementById("searchBtn");
+const grid=document.getElementById("grid");
+const empty=document.getElementById("empty");
+const statusEl=document.getElementById("status");
+const player=document.getElementById("player");
+const video=document.getElementById("video");
+const bar=document.getElementById("bar");
 
-let state={section:"movies",categoryPath:"/cs/",lastPlay:null};
+function esc(s){return String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function api(path){return fetch(API_BASE+path,{headers:{accept:"application/json"}}).then(r=>r.json())}
+function setStatus(t){statusEl.textContent=t}
 
-function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.style.display="block";setTimeout(()=>t.style.display="none",2600)}
-function escapeHtml(s){return String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-function clean(s){return String(s||"").replace(/&amp;/g,"&").replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/<script[\s\S]*?<\/script>/gi,"").replace(/<style[\s\S]*?<\/style>/gi,"").replace(/<[^>]+>/g," ").replace(/\s+/g," ").trim()}
-function first(s,re){const m=re.exec(s||"");return m?clean(m[1]):""}
-function attr(s,re){const m=re.exec(s||"");return m?clean(m[1]):""}
-function absolute(u,base){try{return new URL(u,base).href}catch{return""}}
-function unwrapProxy(u){try{const x=new URL(u,API_BASE);if(x.pathname==="/proxy"&&x.searchParams.get("url"))return x.searchParams.get("url");return x.href}catch{return u}}
-function proxiedUrl(u){if(!u)return"";if(u.startsWith("/proxy?"))return API_BASE.replace(/\/$/,"")+u;return u}
-function setTheme(theme){document.body.className="theme-"+theme;localStorage.setItem("lechplay_theme",theme);document.querySelectorAll(".dot").forEach(d=>d.classList.toggle("active",d.dataset.theme===theme))}
-document.querySelectorAll(".dot").forEach(d=>d.onclick=()=>setTheme(d.dataset.theme));setTheme(localStorage.getItem("lechplay_theme")||"purple");
-
-async function api(path){
-  const r=await fetch(API_BASE.replace(/\/$/,"")+path,{headers:{"accept":"application/json"}});
-  if(!r.ok)throw new Error("API chyba "+r.status);
-  const data=await r.json();
-  if(data.error)throw new Error(data.message||"API chyba");
-  return data;
-}
-
-async function fetchProxyText(url){
-  const r=await fetch(API_BASE.replace(/\/$/,"")+"/proxy?url="+encodeURIComponent(url),{headers:{"accept":"text/html"}});
-  if(!r.ok)throw new Error("Proxy chyba "+r.status);
-  return await r.text();
-}
-
-function normalize(data){return Array.isArray(data)?data:(data.items||data.results||[])}
-function sourceBase(){return SOURCES[state.section].base}
-function categoryUrl(){return sourceBase()+state.categoryPath}
-
-function titleFromUrl(url){
-  try{
-    const slug=decodeURIComponent(new URL(url).pathname.split("/").filter(Boolean).pop()||"");
-    return slug.replace(/-\d{4}$/g,m=>" ("+m.slice(1)+")").replace(/-/g," ").replace(/\b\w/g,c=>c.toUpperCase());
-  }catch{return""}
-}
-
-function firstUrl(s,base,re){
-  const m=re.exec(s||"");
-  if(!m)return"";
-  const raw=clean(m[1]);
-  const abs=unwrapProxy(absolute(raw,base));
-  if(raw.startsWith("/proxy?"))return proxiedUrl(raw);
-  return abs;
-}
-
-function parseItemsFromHtml(html,baseUrl){
-  const items=[];
-  const text=html||"";
-  const re=/<a\b[^>]*href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi;
-  let m;
-  while((m=re.exec(text))){
-    const rawHref=m[1]||"";
-    let url=unwrapProxy(absolute(rawHref,baseUrl));
-    if(!url)continue;
-
-    const isMovie=state.section==="movies"&&url.includes("/cs/player/");
-    const isSeries=state.section==="series"&&url.includes("/cs/detail/");
-    if(!isMovie&&!isSeries)continue;
-
-    const raw=m[2]||"";
-    const after=text.slice(re.lastIndex,re.lastIndex+5000);
-    const around=raw+after;
-
-    let title=attr(raw,/alt=["']([^"']+)["']/i)||attr(raw,/title=["']([^"']+)["']/i)||clean(raw);
-    if(!title||/^\d+$/.test(title)||/^(shl[eé]dnout|sledovat|sledovať|play|více zde|viac zde|\+)$/i.test(title)){
-      title=first(after,/<h1[^>]*>([\s\S]*?)<\/h1>/i)||first(after,/<h2[^>]*>([\s\S]*?)<\/h2>/i)||first(after,/<h3[^>]*>([\s\S]*?)<\/h3>/i)||titleFromUrl(url)||title;
-    }
-
-    let image="";
-const imgs=[];
-around.replace(/<img[^>]+(?:data-src|data-original|data-lazy|src)=["']([^"']+)["'][^>]*>/gi,(all,src)=>{
-  const img=proxiedUrl(unwrapProxy(absolute(src,baseUrl)));
-  const bad=/hd|flag|flags|cz|sk|gb|en|play|speaker|audio|sound|icon|rating|star|blank|spacer/i;
-  const good=/\.(jpg|jpeg|png|webp)(\?|$)/i;
-
-  if(img && good.test(img) && !bad.test(img)){
-    imgs.push(img);
-  }
-});
-
-image=imgs[0]||"";
-
-    title=String(title||"").replace(/^\s*\d+\s+/,"").replace(/\s+/g," ").trim();
-    if(!title||title==="Titulky"||title==="close")continue;
-    if(/^(domů|filmy|tv|registrace|kontakt|spolupráce|kodi|přihlásit)$/i.test(title))continue;
-
-    items.push({title,url,image,section:state.section});
-  }
-
-  const seen=new Set();
-  return items.filter(it=>{
-    if(!it.url||seen.has(it.url))return false;
-    seen.add(it.url);
-    return true;
-  }).slice(0,160);
-}
-
-function renderCategories(){
-  const row=document.getElementById("categoryRow");
-  row.innerHTML="";
-  for(const cat of CATEGORIES[state.section]||[]){
-    const btn=document.createElement("button");
-    btn.className="category-btn";
-    btn.textContent=cat.label;
-    btn.classList.toggle("active",cat.path===state.categoryPath);
-    btn.onclick=()=>selectCategory(cat.path);
-    row.appendChild(btn);
-  }
-}
-
-function render(items){
+function render(){
   grid.innerHTML="";
-  if(!items.length){
-    empty.style.display="block";
-    empty.textContent="Nič sa nenašlo.";
-    return;
-  }
+  empty.style.display=items.length?"none":"block";
 
-  empty.style.display="none";
-
-  for(const it of items){
+  items.forEach((it,i)=>{
     const el=document.createElement("article");
-    el.className="item";
-
-    const icon="▶";
-    const badImage=/hd|flag|flags|cz|sk|gb|en|play|speaker|audio|sound|icon|rating|star|blank|spacer/i;
-const useImage=it.image && !badImage.test(it.image);
-const img=useImage ? `<img src="${escapeHtml(it.image)}" loading="lazy">` : icon;
-
-    el.innerHTML=`<div class="poster">${img}</div><div class="meta"><h4>${escapeHtml(it.title||"Bez názvu")}</h4></div>`;
-    el.onclick=()=>openItem(it);
+    el.className="card";
+    el.dataset.index=i;
+    el.innerHTML=`
+      <div class="poster">${it.image?`<img src="${esc(it.image)}">`:"▶"}</div>
+      <div class="title">${esc(it.title||it.name||"Bez názvu")}</div>
+    `;
     grid.appendChild(el);
-  }
-}
-
-function openItem(it){
-  if(state.section==="series" && it.url && it.url.includes("/cs/detail/")){
-    loadEpisodes(it);
-    return;
-  }
-  playItem(it);
-}
-
-async function loadEpisodes(show){
-  try{
-    empty.style.display="block";
-    empty.textContent="Načítavam epizódy...";
-    grid.innerHTML="";
-    sectionTitle.textContent="📺 "+(show.title||"Seriál");
-
-    const row=document.getElementById("categoryRow");
-    row.innerHTML="";
-    const back=document.createElement("button");
-    back.className="category-btn active";
-    back.textContent="← Späť na seriály";
-    back.onclick=()=>selectSection("series");
-    row.appendChild(back);
-
-    const html=await fetchProxyText(show.url);
-    const episodes=parseEpisodesFromHtml(html,show.url);
-
-    if(!episodes.length){
-      empty.style.display="block";
-      empty.textContent="Epizódy sa nenašli.";
-      return;
-    }
-
-    render(episodes);
-  }catch(e){
-    empty.style.display="block";
-    empty.textContent=e.message;
-    toast(e.message);
-  }
-}
-
-function parseEpisodesFromHtml(html,baseUrl){
-  const episodes=[];
-  const text=html||"";
-
-  const re=/<a\b[^>]*href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/gi;
-  let m;
-
-  while((m=re.exec(text))){
-    const rawHref=m[1]||"";
-    const url=unwrapProxy(absolute(rawHref,baseUrl));
-    if(!url || !url.includes("/cs/player/"))continue;
-
-    const raw=m[2]||"";
-    const before=text.slice(Math.max(0,m.index-2500),m.index);
-    const after=text.slice(re.lastIndex,re.lastIndex+4000);
-    const area=before+raw+after;
-
-    let title=
-      first(before,/<h[1-4][^>]*>([\s\S]*?)<\/h[1-4]>/i) ||
-      first(after,/<h[1-4][^>]*>([\s\S]*?)<\/h[1-4]>/i) ||
-      attr(raw,/title=["']([^"']+)["']/i) ||
-      attr(raw,/alt=["']([^"']+)["']/i) ||
-      clean(raw) ||
-      titleFromUrl(url);
-
-    title=String(title||"").replace(/\s+/g," ").trim();
-
-    if(!title || /^(shl[eé]dnout|sledovat|sledovať|play|prehrát|prehrať)$/i.test(title)){
-      title=titleFromUrl(url)||"Epizóda";
-    }
-
-    const imgs=[];
-area.replace(/<img[^>]+(?:data-src|data-original|data-lazy|src)=["']([^"']+)["'][^>]*>/gi,(all,src)=>{
-  const img=proxiedUrl(unwrapProxy(absolute(src,baseUrl)));
-  const bad=/hd|flag|flags|cz|sk|gb|en|play|speaker|audio|sound|icon|rating|star|blank|spacer/i;
-  const good=/\.(jpg|jpeg|png|webp)(\?|$)/i;
-
-  if(img && good.test(img) && !bad.test(img)){
-    imgs.push(img);
-  }
-});
-
-let image=imgs[0]||"";
-
-    episodes.push({
-      title,
-      url,
-      image,
-      section:"series"
-    });
-  }
-
-  const seen=new Set();
-  return episodes.filter(ep=>{
-    if(!ep.url || seen.has(ep.url))return false;
-    seen.add(ep.url);
-    return true;
   });
+
+  if(items.length) focusIndex=0;
+  updateFocus();
 }
 
-async function selectSection(section){
-  state.section=section;
-  state.categoryPath="/cs/";
-  document.querySelectorAll(".section-card").forEach(x=>x.classList.toggle("active",x.dataset.section===section));
-  sectionTitle.textContent=SOURCES[section].title;
-  q.value="";
-  renderCategories();
-  await loadSection();
+function updateFocus(){
+  q.classList.toggle("focused",focusIndex===-2);
+  searchBtn.classList.toggle("focused",focusIndex===-1);
+
+  document.querySelectorAll(".card").forEach(card=>{
+    card.classList.toggle("focused",Number(card.dataset.index)===focusIndex);
+  });
+
+  const active=document.querySelector(".card.focused");
+  if(active) active.scrollIntoView({block:"nearest",inline:"nearest"});
 }
 
-async function selectCategory(path){
-  state.categoryPath=path;
-  q.value="";
-  renderCategories();
-  await loadSection();
-}
-
-async function loadSection(){
+async function search(){
+  const term=q.value.trim();
+  if(!term){setStatus("Zadaj názov filmu");return}
+  setStatus("Hľadám...");
   empty.style.display="block";
-  empty.textContent="Použi vyhľadávanie hore ↑";
+  empty.textContent="Hľadám...";
   grid.innerHTML="";
-}
-
-async function doSearch(){
-  const query=q.value.trim();
-  if(!query)return loadSection();
+  items=[];
 
   try{
-    empty.style.display="block";
-    empty.textContent="Hľadám...";
-    grid.innerHTML="";
-
-    const data=await api("/api/search?q="+encodeURIComponent(query));
-
-    const items=(data.items||[]).map(x=>({
-      title:x.title,
-      image:x.image,
-      ident:x.ident,   // 🔥 toto je kľúč
-      section:"movies"
-    }));
-
-    render(items);
+    const data=await api("/api/search?q="+encodeURIComponent(term));
+    if(data.error) throw new Error(data.message);
+    items=(data.items||[]).filter(x=>x.ident);
+    empty.textContent=items.length?"":"Nič sa nenašlo.";
+    setStatus(items.length ? `Nájdené: ${items.length}` : "Nič sa nenašlo");
+    render();
   }catch(e){
     empty.textContent=e.message;
-    toast(e.message);
+    setStatus("Chyba");
   }
-}
-
-function initPlayerLogo(){
-  const wrap=document.getElementById("videoWrap");
-  const logo=document.getElementById("lechplayLogo");
-  if(!wrap||!logo)return;
-  let timer;
-  function showLogo(){
-    logo.style.opacity="1";
-    clearTimeout(timer);
-    timer=setTimeout(()=>{logo.style.opacity="0"},2500);
-  }
-  wrap.addEventListener("mousemove",showLogo);
-  wrap.addEventListener("touchstart",showLogo);
-  wrap.addEventListener("click",showLogo);
-  showLogo();
-}
-
-let tvVideoHandler=null;
-function initTVVideo(){
-  const video=document.getElementById("tvVideo");
-  const progress=document.getElementById("tvProgressFill");
-  if(!video)return;
-
-  video.focus();
-
-  function updateProgress(){
-    if(progress && video.duration){
-      progress.style.width=Math.max(0,Math.min(100,(video.currentTime/video.duration)*100))+"%";
-    }
-  }
-  video.addEventListener("timeupdate",updateProgress);
-  video.addEventListener("loadedmetadata",updateProgress);
-
-  if(tvVideoHandler) document.removeEventListener("keydown",tvVideoHandler);
-  tvVideoHandler=function(e){
-    const isPlayerOpen=player.classList.contains("active");
-    if(!isPlayerOpen)return;
-
-    if(e.key==="Enter" || e.key===" "){
-      e.preventDefault();
-      if(video.paused) video.play().catch(()=>{});
-      else video.pause();
-    }
-    if(e.key==="ArrowRight"){
-      e.preventDefault();
-      video.currentTime=Math.min((video.duration||video.currentTime+10),video.currentTime+10);
-    }
-    if(e.key==="ArrowLeft"){
-      e.preventDefault();
-      video.currentTime=Math.max(0,video.currentTime-10);
-    }
-    if(e.key==="ArrowUp"){
-      e.preventDefault();
-      video.volume=Math.min(1,video.volume+0.1);
-    }
-    if(e.key==="ArrowDown"){
-      e.preventDefault();
-      video.volume=Math.max(0,video.volume-0.1);
-    }
-    if(e.key==="Escape" || e.key==="Backspace" || e.key==="BrowserBack"){
-      e.preventDefault();
-      closePlayer.click();
-    }
-  };
-  document.addEventListener("keydown",tvVideoHandler);
 }
 
 async function playItem(it){
-  state.lastPlay=it;
-  playerTitle.textContent=it.title||"Prehrávač";
+  if(!it || !it.ident)return;
+  playing=it;
+  setStatus("Načítavam prehrávanie...");
   player.classList.add("active");
-  playerBody.innerHTML='<div class="empty" style="margin:22px">Načítavam prehrávač...</div>';
+  video.removeAttribute("src");
+  video.load();
+
   try{
-    const ident = it.ident || "";
-if (!ident) throw new Error("Chýba Webshare ident. Vyber film z Webshare hľadania.");
-const data = await api("/api/play?ident=" + encodeURIComponent(ident));
-        if(data.proxyUrl){
-      playerBody.innerHTML=`
-        <div class="video-wrap" id="videoWrap">
-          <video id="tvVideo" controls autoplay playsinline tabindex="0" src="${escapeHtml(API_BASE.replace(/\/$/,"")+data.proxyUrl)}"></video>
-          <div class="player-logo" id="lechplayLogo">▶ LechPlay</div>
-          <div class="tv-hint">OK: Play/Pause · ◀ ▶: ±10s · ▲ ▼: hlasitosť · Back: zavrieť</div>
-          <div class="tv-progress"><span id="tvProgressFill"></span></div>
-        </div>`;
-      initPlayerLogo();
-      initTVVideo();
-      return;
-    }
+    const data=await api("/api/play?ident="+encodeURIComponent(it.ident));
+    if(data.error) throw new Error(data.message);
 
-    if(data.videoUrl){
-      playerBody.innerHTML=`<div class="video-wrap" id="videoWrap"><video id="tvVideo" controls autoplay playsinline tabindex="0" src="${escapeHtml(data.videoUrl)}"></video><div class="player-logo" id="lechplayLogo">▶ LechPlay</div><div class="tv-hint">OK: Play/Pause · ◀ ▶: ±10s · ▲ ▼: hlasitosť · Back: zavrieť</div><div class="tv-progress"><span id="tvProgressFill"></span></div></div>`;
-      initPlayerLogo();
-      initTVVideo();
-      return;
-    }
+    const src=data.proxyUrl ? API_BASE+data.proxyUrl : data.videoUrl;
+    if(!src) throw new Error("Video link sa nenašiel.");
 
-    if(data.embedUrl){
-      playerBody.innerHTML='<div class="empty" style="margin:22px">Tento zdroj vracia iba externý iframe prehrávač. Pre TV ovládanie použi Webshare/direct video zdroj.</div>';
-      return;
-    }
-    playerBody.innerHTML='<div class="empty" style="margin:22px">Prehrávač sa nenašiel. Skús inú položku.</div>';
-
+    video.src=src;
+    await video.play().catch(()=>{});
   }catch(e){
-    playerBody.innerHTML='<div class="empty" style="margin:22px">'+escapeHtml(e.message)+'</div>';
-    toast(e.message);
+    closePlayer();
+    setStatus(e.message);
   }
 }
 
-closePlayer.onclick=()=>{player.classList.remove("active");playerBody.innerHTML="";if(tvVideoHandler){document.removeEventListener("keydown",tvVideoHandler);tvVideoHandler=null}};
-reloadPlayer.onclick=()=>{if(state.lastPlay)playItem(state.lastPlay)};
-searchBtn.onclick=doSearch;
-refreshBtn.onclick=loadSection;
-homeBtn.onclick=()=>selectSection(state.section);
-q.addEventListener("keydown",e=>{if(e.key==="Enter")doSearch()});
-empty.style.display="block";
-empty.textContent="Napíš názov filmu do vyhľadávania.";
-renderCategories();
+function closePlayer(){
+  video.pause();
+  video.removeAttribute("src");
+  video.load();
+  player.classList.remove("active");
+  updateFocus();
+}
+
+function activate(){
+  if(player.classList.contains("active")){
+    if(video.paused) video.play().catch(()=>{});
+    else video.pause();
+    return;
+  }
+
+  if(focusIndex===-2){
+    q.focus();
+    return;
+  }
+
+  if(focusIndex===-1){
+    search();
+    return;
+  }
+
+  playItem(items[focusIndex]);
+}
+
+function move(dx,dy){
+  if(player.classList.contains("active"))return;
+
+  const cols=5;
+
+  if(focusIndex===-2){
+    if(dx>0) focusIndex=-1;
+    if(dy>0 && items.length) focusIndex=0;
+  }else if(focusIndex===-1){
+    if(dx<0) focusIndex=-2;
+    if(dy>0 && items.length) focusIndex=0;
+  }else{
+    let next=focusIndex + dx + dy*cols;
+    if(dy<0 && focusIndex<cols) next=-2;
+    next=Math.max(-2,Math.min(items.length-1,next));
+    focusIndex=next;
+  }
+
+  updateFocus();
+}
+
+document.addEventListener("keydown",e=>{
+  const key=e.key;
+
+  if(player.classList.contains("active")){
+    if(key==="Enter"||key===" "){e.preventDefault();activate()}
+    if(key==="Escape"||key==="Backspace"||key==="BrowserBack"){e.preventDefault();closePlayer()}
+    if(key==="ArrowRight"){e.preventDefault();video.currentTime=Math.min(video.duration||video.currentTime+10,video.currentTime+10)}
+    if(key==="ArrowLeft"){e.preventDefault();video.currentTime=Math.max(0,video.currentTime-10)}
+    if(key==="ArrowUp"){e.preventDefault();video.volume=Math.min(1,video.volume+.1)}
+    if(key==="ArrowDown"){e.preventDefault();video.volume=Math.max(0,video.volume-.1)}
+    return;
+  }
+
+  if(key==="ArrowRight"){e.preventDefault();move(1,0)}
+  if(key==="ArrowLeft"){e.preventDefault();move(-1,0)}
+  if(key==="ArrowDown"){e.preventDefault();move(0,1)}
+  if(key==="ArrowUp"){e.preventDefault();move(0,-1)}
+  if(key==="Enter"){e.preventDefault();activate()}
+  if(key==="Escape"||key==="Backspace"||key==="BrowserBack"){
+    e.preventDefault();
+    focusIndex=-2;
+    q.focus();
+    updateFocus();
+  }
+});
+
+video.addEventListener("timeupdate",()=>{
+  if(video.duration) bar.style.width=((video.currentTime/video.duration)*100)+"%";
+});
+
+q.addEventListener("keydown",e=>{
+  if(e.key==="Enter"){e.preventDefault();search()}
+});
+
+searchBtn.onclick=search;
+
+focusIndex=-2;
+q.focus();
+updateFocus();
 </script>
 </body>
 </html>
