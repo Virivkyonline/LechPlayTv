@@ -184,7 +184,51 @@ async function playItem(it){
 }
 
 function closePlayer(){video.pause();video.removeAttribute("src");video.load();player.classList.remove("active");updateFocus()}
-function activate(){if(player.classList.contains("active")){video.paused?video.play().catch(()=>{}):video.pause();return}if(focusIndex===-5){setCategory("video");return}if(focusIndex===-4){setCategory("audio");return}if(focusIndex===-3){setCategory("favorites");return}if(focusIndex===-2){q.focus();return}if(focusIndex===-1){search();return}if(focusIndex>=0&&items[focusIndex])playItem(items[focusIndex])}
+function activate(){
+
+  // prehrávač
+  if(player.classList.contains("active")){
+    if(video.paused){
+      video.play().catch(()=>{});
+    }else{
+      video.pause();
+    }
+    return;
+  }
+
+  // horné menu
+  if(focusIndex === -5){
+    setCategory("video");
+    return;
+  }
+
+  if(focusIndex === -4){
+    setCategory("audio");
+    return;
+  }
+
+  if(focusIndex === -3){
+    setCategory("favorites");
+    return;
+  }
+
+  // input
+  if(focusIndex === -2){
+    q.focus();
+    return;
+  }
+
+  // search button
+  if(focusIndex === -1){
+    search();
+    return;
+  }
+
+  // karty
+  if(focusIndex >= 0 && items[focusIndex]){
+    playItem(items[focusIndex]);
+  }
+}
 
 function move(dx,dy){
   if(player.classList.contains("active"))return;const cols=5;
