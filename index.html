@@ -603,6 +603,7 @@ video.addEventListener("timeupdate",()=>{
 q.addEventListener("keydown",e=>{
   if(e.key==="Enter"){
     e.preventDefault();
+    e.stopPropagation();
     search();
   }
 });
