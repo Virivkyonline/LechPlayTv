@@ -65,6 +65,10 @@ button{cursor:pointer;border:0;color:#fff}
   color:#fff;
   border:1px solid rgba(229,9,20,.4);
 }
+.nav button.favorites-tab{
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.12);
+}
 .searchbar{margin-left:auto;display:flex;gap:10px;align-items:center;min-width:260px;max-width:560px;flex:1}
 .searchbar input{
   width:100%;height:46px;border-radius:999px;border:1px solid var(--line);
@@ -145,6 +149,17 @@ button{cursor:pointer;border:0;color:#fff}
   width:42px;height:42px;border-radius:999px;background:rgba(0,0,0,.72);
   border:1px solid rgba(255,255,255,.22);display:grid;place-items:center;
 }
+.star-btn{
+  position:absolute;right:10px;top:10px;z-index:5;
+  width:42px;height:42px;border-radius:999px;
+  background:rgba(0,0,0,.72);
+  border:1px solid rgba(255,255,255,.22);
+  display:grid;place-items:center;
+  font-size:22px;
+  color:#fff;
+}
+.star-btn.on{color:#fbbf24;background:rgba(0,0,0,.82)}
+.star-btn:active{transform:scale(.94)}
 .empty{
   padding:44px 18px;text-align:center;color:var(--muted);font-weight:900;
   border:1px dashed rgba(255,255,255,.16);border-radius:var(--radius);
@@ -232,12 +247,13 @@ video{
   <header class="top">
     <div class="logo" id="logo" title="Klikni 5× pre tajnú sekciu">
       <div class="logo-mark">▶</div>
-      <span>LECHFLIX</span>
+      <span>LECHPLAY</span>
     </div>
 
     <nav class="nav">
       <button id="tabVideo" class="active" data-cat="video">Filmy</button>
       <button id="tabAudio" data-cat="audio">Hudba</button>
+      <button id="tabFavorites" class="favorites-tab" data-cat="favorites">⭐ Obľúbené</button>
       <button id="tabAdult" class="adult" data-cat="adult">18+</button>
     </nav>
 
@@ -251,8 +267,8 @@ video{
 
   <section class="hero">
     <div>
-      <h1 id="heroTitle">Filmy Lechflix.</h1>
-      <p id="heroText">Vyhľadávaj, prehrávaj Lechflix priamo v appke a používaj jednoduchý prehrávač prispôsobený celej obrazovke.</p>
+      <h1 id="heroTitle">Filmy ako Netflix.</h1>
+      <p id="heroText">Vyhľadávaj na Webshare, prehrávaj priamo v appke a používaj jednoduchý prehrávač prispôsobený celej obrazovke.</p>
       <div class="hero-actions">
         <button class="primary" id="heroSearch">Hľadať teraz</button>
         <button class="secondary" id="heroAdult">Odomknúť 18+</button>
@@ -334,6 +350,7 @@ let currentOffset = 0;
 let currentLimit = 40;
 let hasMore = false;
 let loadingMore = false;
+let favorites = [];
 let logoClicks = 0;
 let controlsTimer = null;
 
@@ -373,6 +390,69 @@ function refreshAdultButton(){
   tabAdult.style.display = adultUnlocked ? "inline-flex" : "none";
 }
 
+async function loadFavorites(){
+  try{
+    const res = await fetch(API_BASE + "/api/favorites", { headers:{accept:"application/json"} });
+    const data = await res.json();
+    if (data.error) throw new Error(data.message || "Chyba favorites");
+    favorites = Array.isArray(data.items) ? data.items : [];
+  }catch(e){
+    favorites = [];
+    setStatus("Obľúbené sa nenačítali");
+  }
+}
+
+function isFav(it){
+  return !!favorites.find(f => f.ident === it.ident);
+}
+
+async function toggleFavorite(it, ev){
+  if (ev) {
+    ev.preventDefault();
+    ev.stopPropagation();
+  }
+
+  if (!it || !it.ident) return;
+
+  const wasFav = isFav(it);
+
+  try{
+    if (wasFav){
+      await fetch(API_BASE + "/api/favorite?ident=" + encodeURIComponent(it.ident), {
+        method:"DELETE",
+        headers:{accept:"application/json"}
+      });
+
+      favorites = favorites.filter(f => f.ident !== it.ident);
+
+      if (category === "favorites") {
+        items = items.filter(x => x.ident !== it.ident);
+      }
+
+      setStatus("Odstránené z obľúbených");
+    }else{
+      const res = await fetch(API_BASE + "/api/favorite", {
+        method:"POST",
+        headers:{
+          "content-type":"application/json",
+          accept:"application/json"
+        },
+        body: JSON.stringify(it)
+      });
+
+      const data = await res.json();
+      if (data.error) throw new Error(data.message || "Chyba uloženia");
+
+      favorites = [data.item, ...favorites.filter(f => f.ident !== it.ident)];
+      setStatus("Pridané do obľúbených");
+    }
+
+    render();
+  }catch(e){
+    setStatus(e.message || "Chyba obľúbených");
+  }
+}
+
 function setCategory(cat){
   if (cat === "adult" && !adultUnlocked){
     openPin();
@@ -389,15 +469,15 @@ function setCategory(cat){
 
   if (cat === "video"){
     q.placeholder = "Hľadať film...";
-    $("heroTitle").textContent = "Filmy ako Lechflix.";
-    $("heroText").textContent = "Vyhľadávaj filmy na Lechflix a prehrávaj ich priamo v appke.";
+    $("heroTitle").textContent = "Filmy ako Netflix.";
+    $("heroText").textContent = "Vyhľadávaj filmy na Webshare a prehrávaj ich priamo v appke.";
     sectionTitle.textContent = "Filmy";
   }
 
   if (cat === "audio"){
     q.placeholder = "Hľadať hudbu...";
     $("heroTitle").textContent = "Hudba v TV režime.";
-    $("heroText").textContent = "Vyhľadávaj skladby a audio súbory cez Lechflix.";
+    $("heroText").textContent = "Vyhľadávaj skladby a audio súbory cez Webshare.";
     sectionTitle.textContent = "Hudba";
   }
 
@@ -406,6 +486,22 @@ function setCategory(cat){
     $("heroTitle").textContent = "18+ sekcia.";
     $("heroText").textContent = "Súkromná sekcia je odomknutá. Vyhľadávanie ide cez Webshare adult kategóriu.";
     sectionTitle.textContent = "18+";
+  }
+
+  if (cat === "favorites"){
+    q.placeholder = "Hľadať v obľúbených...";
+    $("heroTitle").textContent = "Tvoje obľúbené.";
+    $("heroText").textContent = "Videá uložené cez worker, dostupné na každom zariadení.";
+    sectionTitle.textContent = "Obľúbené";
+    items = [...favorites];
+    currentOffset = 0;
+    hasMore = false;
+    updateLoadMoreButton();
+    render();
+    sectionMeta.textContent = "Uložené: " + favorites.length;
+    empty.textContent = favorites.length ? "" : "Zatiaľ nemáš žiadne obľúbené.";
+    empty.style.display = favorites.length ? "none" : "block";
+    return;
   }
 
   items = [];
@@ -419,6 +515,16 @@ function setCategory(cat){
 }
 
 async function search(){
+  if (category === "favorites"){
+    const termFav = q.value.trim().toLowerCase();
+    items = favorites.filter(it => !termFav || String(it.title || it.name || "").toLowerCase().includes(termFav));
+    render();
+    sectionMeta.textContent = "Obľúbené: " + items.length;
+    empty.textContent = items.length ? "" : "Nič sa nenašlo v obľúbených.";
+    empty.style.display = items.length ? "none" : "block";
+    return;
+  }
+
   const term = q.value.trim();
   if (!term){
     setStatus("Zadaj názov");
@@ -507,6 +613,7 @@ function render(){
     const img = it.image || it.stripe || "";
     el.innerHTML = `
       <div class="play-pill">▶</div>
+      <button class="star-btn ${isFav(it) ? "on" : ""}" title="Obľúbené">${isFav(it) ? "★" : "☆"}</button>
       <div class="poster">${img ? `<img src="${esc(img)}" alt="">` : "▶"}</div>
       <div class="card-body">
         <div class="title">${esc(it.title || it.name || "Bez názvu")}</div>
@@ -516,6 +623,8 @@ function render(){
         </div>
       </div>
     `;
+    const star = el.querySelector(".star-btn");
+    star.onclick = (ev) => toggleFavorite(it, ev);
     el.onclick = () => playItem(it);
     el.onkeydown = e => {
       if(e.key === "Enter"){
@@ -724,7 +833,7 @@ document.addEventListener("keydown", e => {
 
 refreshAdultButton();
 updateLoadMoreButton();
-setCategory("video");
+loadFavorites().then(() => setCategory("video"));
 </script>
 </body>
 </html>
